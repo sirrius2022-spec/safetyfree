@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>안전프로 (SafePro) - 건설안전기술사 홍길동 컨설팅</title>
+  
+  <!-- Pretendard / Noto Sans KR 폰트 로드 -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              950: '#070d1e',
+              900: '#0b132b',
+              800: '#1c2541',
+              700: '#273456',
+            },
+            safety: {
+              yellow: '#fbbf24',
+              orange: '#f59e0b',
+              amber: '#d97706',
+              red: '#ef4444',
+              green: '#10b981',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* 커스텀 스크롤바 & 터치 조작성 최적화 */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b132b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #273456;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f59e0b;
+    }
+    .safe-glow {
+      box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.25);
+    }
+    .safe-glow-red {
+      box-shadow: 0 0 20px -5px rgba(239, 68, 68, 0.3);
+    }
+    .badge-hazard {
+      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+    }
+    /* 인쇄 모드 최적화 */
+    @media print {
+      body * { visibility: hidden; }
+      #printableArea, #printableArea * { visibility: visible; }
+      #printableArea { position: absolute; left: 0; top: 0; width: 100%; color: black; background: white; }
+    }
+  </style>
+</head>
+<body class="bg-navy-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-safety-orange selection:text-navy-950 pb-20 md:pb-8">
+
+  <!-- ================= 상단 글로벌 내비게이션 ================= -->
+  <header class="sticky top-0 z-40 bg-navy-900/95 backdrop-blur border-b border-navy-700/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- 로고 & 타이틀 -->
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-safety-yellow via-safety-orange to-amber-600 flex items-center justify-center text-navy-950 font-black shadow-lg shadow-safety-orange/30 group-hover:scale-105 transition-transform">
+          <i class="fa-solid fa-helmet-safety text-xl"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-black tracking-tight text-white">안전프로</span>
+            <span class="px-2 py-0.5 text-[11px] font-bold bg-safety-orange text-navy-950 rounded-full tracking-wider">SafePro</span>
+          </div>
+          <p class="text-xs text-slate-400 font-medium">건설안전기술사 홍길동 컨설팅</p>
+        </div>
+      </a>
+
+      <!-- 데스크톱 내비게이션 링크 -->
+      <nav class="hidden md:flex items-center gap-1 lg:gap-2">
+        <button onclick="scrollToSection('hero')" class="px-3 py-2 text-sm font-semibold text-slate-300 hover:text-safety-yellow rounded-lg hover:bg-navy-800 transition">전문가 소개</button>
+        <button onclick="scrollToSection('agents-section')" class="px-3 py-2 text-sm font-semibold text-slate-300 hover:text-safety-yellow rounded-lg hover:bg-navy-800 transition flex items-center gap-1.5">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-safety-orange opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-safety-yellow"></span>
+          </span>
+          AI 안전 에이전트 (5종)
+        </button>
+        <button onclick="scrollToSection('services')" class="px-3 py-2 text-sm font-semibold text-slate-300 hover:text-safety-yellow rounded-lg hover:bg-navy-800 transition">컨설팅 솔루션</button>
+        <button onclick="scrollToSection('portfolio')" class="px-3 py-2 text-sm font-semibold text-slate-300 hover:text-safety-yellow rounded-lg hover:bg-navy-800 transition">수행 실적</button>
+      </nav>
+
+      <!-- 긴급 상담 & 견적 버튼 -->
+      <div class="flex items-center gap-2">
+        <button onclick="openConsultModal()" class="px-3.5 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold bg-gradient-to-r from-safety-orange to-amber-500 hover:from-amber-400 hover:to-safety-yellow text-navy-950 rounded-xl shadow-md transition flex items-center gap-2 transform active:scale-95">
+          <i class="fa-solid fa-file-signature"></i>
+          <span>실시간 견적·상담</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= 메인 히어로 섹션 ================= -->
+  <section id="hero" class="relative pt-8 pb-14 md:pt-16 md:pb-20 overflow-hidden border-b border-navy-800">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(245,158,11,0.15),rgba(255,255,255,0))]"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- 좌측 카피 & 소개 -->
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-navy-800 border border-navy-700 text-xs sm:text-sm font-bold text-safety-yellow">
+            <span class="w-2 h-2 rounded-full bg-safety-green animate-pulse"></span>
+            중대재해처벌법 및 위험성평가 전문 대응 솔루션
+          </div>
+          
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight sm:leading-snug text-white">
+            중대재해 <span class="text-transparent bg-clip-text bg-gradient-to-r from-safety-yellow via-safety-orange to-red-400">제로(ZERO)</span> 실현,<br/>
+            현장 중심 실무형 <span class="underline decoration-safety-orange decoration-4 underline-offset-4">건설안전기술사 홍길동</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            복잡하고 막막한 중대재해처벌법과 안전보건체계, 형식적인 서류가 아닌 <strong class="text-white font-semibold">실제 현장 가동형 안전관리 프로세스</strong>로 기업의 법적 리스크를 완벽 차단합니다. 20년 현장 경력 기술사가 직접 진단하고 동행합니다.
+          </p>
+
+          <!-- 빠른 통계 배지 -->
+          <div class="grid grid-cols-3 gap-3 pt-2 max-w-lg mx-auto lg:mx-0">
+            <div class="bg-navy-900/90 border border-navy-700/80 p-3 sm:p-4 rounded-2xl text-center safe-glow">
+              <div class="text-2xl sm:text-3xl font-black text-safety-yellow">20+<span class="text-xs text-slate-400 font-medium">년</span></div>
+              <div class="text-[11px] sm:text-xs text-slate-400 mt-1 font-semibold">현장 안전관리 경력</div>
+            </div>
+            <div class="bg-navy-900/90 border border-navy-700/80 p-3 sm:p-4 rounded-2xl text-center">
+              <div class="text-2xl sm:text-3xl font-black text-safety-green">100%</div>
+              <div class="text-[11px] sm:text-xs text-slate-400 mt-1 font-semibold">고용노동부 점검 통과</div>
+            </div>
+            <div class="bg-navy-900/90 border border-navy-700/80 p-3 sm:p-4 rounded-2xl text-center">
+              <div class="text-2xl sm:text-3xl font-black text-white">350+<span class="text-xs text-slate-400 font-medium">건</span></div>
+              <div class="text-[11px] sm:text-xs text-slate-400 mt-1 font-semibold">위험성평가 컨설팅</div>
+            </div>
+          </div>
+
+          <!-- 액션 버튼 -->
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
+            <button onclick="scrollToSection('agents-section')" class="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-safety-orange to-amber-500 hover:from-amber-400 hover:to-safety-yellow text-navy-950 font-black rounded-xl shadow-lg shadow-safety-orange/20 transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-robot"></i>
+              <span>AI 안전 에이전트 5종 체험하기</span>
+            </button>
+            <a href="tel:010-1234-5678" class="w-full sm:w-auto px-6 py-3.5 bg-navy-800 hover:bg-navy-700 text-slate-200 hover:text-white font-bold rounded-xl border border-navy-600 transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-phone text-safety-green"></i>
+              <span>직통 유선상담 연결</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 우측 프로필 카드 -->
+        <div class="lg:col-span-5">
+          <div class="bg-gradient-to-b from-navy-800 to-navy-900 border-2 border-navy-700 rounded-3xl p-6 sm:p-7 relative shadow-2xl safe-glow">
+            <div class="absolute -top-3.5 right-6 px-3 py-1 bg-safety-orange text-navy-950 text-xs font-black rounded-full uppercase tracking-wider shadow">
+              Certified Professional
+            </div>
+
+            <div class="flex items-center gap-4 border-b border-navy-700 pb-5">
+              <div class="relative">
+                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-navy-700 to-navy-900 border-2 border-safety-yellow flex items-center justify-center text-3xl sm:text-4xl text-safety-yellow shadow-inner">
+                  <i class="fa-solid fa-user-tie"></i>
+                </div>
+                <span class="absolute -bottom-1 -right-1 w-6 h-6 bg-safety-green text-navy-950 rounded-full flex items-center justify-center text-xs font-black border-2 border-navy-900">
+                  <i class="fa-solid fa-check"></i>
+                </span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-xl sm:text-2xl font-black text-white">홍길동</h3>
+                  <span class="text-xs bg-navy-700 text-safety-yellow font-bold px-2 py-0.5 rounded">프리랜서 기술사</span>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-300 mt-1 font-medium">건설안전기술사 / 산업안전지도사(건설)</p>
+                <p class="text-xs text-slate-400">전 대형건설사 안전기획팀 총괄 15년</p>
+              </div>
+            </div>
+
+            <div class="py-4 space-y-2.5 text-xs sm:text-sm">
+              <div class="flex items-center justify-between text-slate-300">
+                <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-certificate text-safety-orange"></i> 보유 자격:</span>
+                <span class="font-bold text-white">건설안전기술사, 건축시공기술사</span>
+              </div>
+              <div class="flex items-center justify-between text-slate-300">
+                <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-briefcase text-safety-orange"></i> 전문 분야:</span>
+                <span class="font-bold text-white">중처법 자문, 스마트 안전, 공공발주 안전점검</span>
+              </div>
+              <div class="flex items-center justify-between text-slate-300">
+                <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-location-dot text-safety-orange"></i> 활동 권역:</span>
+                <span class="font-bold text-white">전국 현장 출장 & 비대면 컨설팅</span>
+              </div>
+            </div>
+
+            <div class="bg-navy-950/70 p-3.5 rounded-2xl border border-navy-800 text-xs text-slate-300 space-y-1">
+              <div class="font-bold text-safety-yellow flex items-center gap-1.5">
+                <i class="fa-solid fa-quote-left text-xs"></i>
+                컨설턴트 철학
+              </div>
+              <p class="leading-relaxed">
+                "안전은 규제가 아닌 현장 생산성의 핵심 기반입니다. 현장 근로자와 관리감독자가 가장 쉽게 실천할 수 있는 현실적인 처방을 드립니다."
+              </p>
+            </div>
+
+            <button onclick="openConsultModal('홍길동 기술사 다이렉트 자문')" class="mt-4 w-full py-3 bg-navy-700 hover:bg-navy-600 text-safety-yellow hover:text-white font-bold rounded-xl transition flex items-center justify-center gap-2 text-sm border border-navy-600">
+              <i class="fa-solid fa-comments"></i>
+              홍길동 기술사와 1:1 상담 예약
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 5대 AI 안전 에이전트 인터랙티브 허브 ================= -->
+  <section id="agents-section" class="py-12 md:py-16 bg-navy-900 border-b border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- 섹션 헤더 -->
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="px-3 py-1 text-xs font-black uppercase tracking-wider bg-safety-yellow/10 text-safety-yellow rounded-full border border-safety-yellow/30">
+          Interactive Safety Lab
+        </span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-white mt-3">
+          현장 실무 즉시 적용, <span class="text-safety-orange">5대 AI 안전 에이전트</span>
+        </h2>
+        <p class="text-sm sm:text-base text-slate-300 mt-2">
+          실제 컨설팅에서 활용되는 데이터 알고리즘을 체험해보세요. 클릭 한 번으로 위험성평가부터 TBM, 법령 점검표를 즉시 산출합니다.
+        </p>
+      </div>
+
+      <!-- 5대 에이전트 선택 탭 (모바일 스크롤 & 고시인성) -->
+      <div class="flex overflow-x-auto pb-3 gap-2 sm:gap-3 no-scrollbar scroll-smooth mb-8 border-b border-navy-800/80">
+        
+        <button onclick="switchAgent(1)" id="tab-btn-1" class="agent-tab flex-shrink-0 px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2.5 transition border bg-safety-orange text-navy-950 border-safety-yellow shadow-md">
+          <i class="fa-solid fa-table-list text-base"></i>
+          <span>1. AI 위험성평가 생성기</span>
+        </button>
+
+        <button onclick="switchAgent(2)" id="tab-btn-2" class="agent-tab flex-shrink-0 px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2.5 transition border bg-navy-800 text-slate-300 border-navy-700 hover:bg-navy-750">
+          <i class="fa-solid fa-shield-halved text-base"></i>
+          <span>2. 중처법 자가진단</span>
+        </button>
+
+        <button onclick="switchAgent(3)" id="tab-btn-3" class="agent-tab flex-shrink-0 px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2.5 transition border bg-navy-800 text-slate-300 border-navy-700 hover:bg-navy-750">
+          <i class="fa-solid fa-bullhorn text-base"></i>
+          <span>3. 스마트 TBM 가이드</span>
+        </button>
+
+        <button onclick="switchAgent(4)" id="tab-btn-4" class="agent-tab flex-shrink-0 px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2.5 transition border bg-navy-800 text-slate-300 border-navy-700 hover:bg-navy-750">
+          <i class="fa-solid fa-truck-monster text-base"></i>
+          <span>4. 건설기계·가설구조 점검표</span>
+        </button>
+
+        <button onclick="switchAgent(5)" id="tab-btn-5" class="agent-tab flex-shrink-0 px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2.5 transition border bg-navy-800 text-slate-300 border-navy-700 hover:bg-navy-750">
+          <i class="fa-solid fa-person-falling-burst text-base"></i>
+          <span>5. 아차사고·재해사례 대책기</span>
+        </button>
+
+      </div>
+
+      <!-- ================= 에이전트 인터랙션 컨테이너 ================= -->
+      <div class="bg-navy-950 border-2 border-navy-700 rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl relative min-h-[520px]">
+        
+        <!-- [에이전트 1]: AI 위험성평가표 자동 생성기 -->
+        <div id="agent-view-1" class="agent-panel space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-navy-800 gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded text-xs font-black bg-safety-yellow text-navy-950 uppercase">AGENT 01</span>
+                <h3 class="text-lg sm:text-xl font-black text-white">AI 위험성평가표 (KOSHA 빈도·강도법 기반) 생성기</h3>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-400 mt-1">공종과 세부 작업을 지정하면 위험성 수준(3x3 / 5x5) 및 구체적 감소대책을 즉시 도출합니다.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="printAgentResult('agent-1-output', '위험성평가표')" class="px-3 py-1.5 text-xs bg-navy-800 hover:bg-navy-750 text-slate-200 border border-navy-700 rounded-lg flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-print"></i> 인쇄
+              </button>
+              <button onclick="copyTableText('agent-1-output')" class="px-3 py-1.5 text-xs bg-navy-800 hover:bg-navy-750 text-safety-yellow border border-navy-700 rounded-lg flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-copy"></i> 복사
+              </button>
+            </div>
+          </div>
+
+          <!-- 입력 폼 -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-300 mb-1">대상 공종 선택</label>
+              <select id="risk-category" class="w-full bg-navy-900 border border-navy-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-medium focus:ring-2 focus:ring-safety-orange focus:border-safety-orange outline-none">
+                <option value="scaffold">가설공사 (강관/시스템비계 작업)</option>
+                <option value="earthwork">토공사 (터파기 및 흙막이 가시설)</option>
+                <option value="steel">철골공사 (고소 철골 부재 인양·조립)</option>
+                <option value="concrete">콘크리트타설 (펌프카 타설 및 거푸집동바리)</option>
+                <option value="electric">설비/전기 (고소배관 및 활선 근접작업)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-300 mb-1">세부 작업 공정</label>
+              <input id="risk-subtask" type="text" value="비계 설치 중 작업발판 상부 체결" placeholder="예: H-Beam 인양 후 볼트 체결" class="w-full bg-navy-900 border border-navy-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-medium focus:ring-2 focus:ring-safety-orange focus:border-safety-orange outline-none">
+            </div>
+            <div class="flex items-end">
+              <button onclick="generateRiskAssessment()" class="w-full py-2.5 bg-safety-orange hover:bg-safety-yellow text-navy-950 font-black rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-md">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                위험성평가표 자동 생성
+              </button>
+            </div>
+          </div>
+
+          <!-- 결과 출력 테이블 -->
+          <div id="agent-1-output" class="bg-navy-900 border border-navy-800 rounded-2xl p-4 overflow-x-auto">
+            <!-- 렌더링 영역 (JS) -->
+          </div>
+        </div>
+
+        <!-- [에이전트 2]: 중대재해처벌법 자가진단 에이전트 -->
+        <div id="agent-view-2" class="agent-panel hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-navy-800 gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded text-xs font-black bg-safety-red text-white uppercase">AGENT 02</span>
+                <h3 class="text-lg sm:text-xl font-black text-white">중대재해처벌법 핵심 6개 의무 자가진단 및 리스크 스코어</h3>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-400 mt-1">사업장/현장의 법적 안전보건관리체계 구축 이행 실태를 신속 판정합니다.</p>
+            </div>
+            <button onclick="calculateCsapScore()" class="px-4 py-2 bg-safety-yellow hover:bg-amber-400 text-navy-950 text-xs sm:text-sm font-black rounded-xl transition flex items-center gap-1.5 self-start sm:self-auto">
+              <i class="fa-solid fa-chart-pie"></i> 진단 결과 재계산
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- 체크리스트 문항 -->
+            <div class="lg:col-span-7 space-y-3" id="csap-questions">
+              <!-- JS 동적 생성 -->
+            </div>
+
+            <!-- 스코어카드 & 리포트 -->
+            <div class="lg:col-span-5 bg-navy-900 border border-navy-700/80 rounded-2xl p-5 flex flex-col justify-between">
+              <div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">종합 이행 진단 스코어</div>
+                
+                <div class="flex items-baseline gap-3">
+                  <span id="csap-score-num" class="text-4xl sm:text-5xl font-black text-safety-yellow">66</span>
+                  <span class="text-slate-400 text-sm font-bold">/ 100점</span>
+                  <span id="csap-badge" class="ml-auto px-3 py-1 rounded-full text-xs font-black bg-amber-500/20 text-amber-400 border border-amber-500/40">주의 요망</span>
+                </div>
+
+                <!-- 프로그레스 바 -->
+                <div class="w-full bg-navy-800 rounded-full h-3.5 my-4 overflow-hidden border border-navy-700">
+                  <div id="csap-progress" class="bg-gradient-to-r from-red-500 via-amber-400 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 66%;"></div>
+                </div>
+
+                <div class="mt-4 p-4 rounded-xl bg-navy-950/80 border border-navy-800 space-y-2">
+                  <div class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                    <i class="fa-solid fa-triangle-exclamation text-safety-orange"></i>
+                    홍길동 기술사의 긴급 시급 개선안
+                  </div>
+                  <p id="csap-feedback" class="text-xs text-slate-300 leading-relaxed">
+                    도급·용역·위탁 시 적격 수급업체 평가 기준 및 종사자 의견 청취 절차가 미흡합니다. 수사기관의 첫 번째 압수수색 확인 항목이므로 서면 기준 마련이 시급합니다.
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-t border-navy-800">
+                <button onclick="openConsultModal('중대재해처벌법 자가진단 후속 심층진단 신청')" class="w-full py-3 bg-navy-800 hover:bg-navy-700 text-white font-bold rounded-xl text-xs sm:text-sm border border-navy-600 transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-file-contract text-safety-yellow"></i>
+                  사업장 맞춤형 정밀진단 의뢰
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- [에이전트 3]: 스마트 TBM 가이드 생성기 -->
+        <div id="agent-view-3" class="agent-panel hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-navy-800 gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded text-xs font-black bg-safety-green text-navy-950 uppercase">AGENT 03</span>
+                <h3 class="text-lg sm:text-xl font-black text-white">스마트 TBM (Tool Box Meeting) 3분 현장 브리핑 생성기</h3>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-400 mt-1">오늘 날씨 기상특보와 작업 상황을 결합해 반장님이 바로 읽는 TBM 스크립트를 작성합니다.</p>
+            </div>
+            <button onclick="copyTbmText()" class="px-3 py-1.5 text-xs bg-navy-800 hover:bg-navy-750 text-safety-yellow border border-navy-700 rounded-lg flex items-center gap-1.5 self-start sm:self-auto transition">
+              <i class="fa-solid fa-copy"></i> TBM 대본 전체 복사
+            </button>
+          </div>
+
+          <!-- 옵션 선택바 -->
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-300 mb-1">기상 환경 / 날씨</label>
+              <select id="tbm-weather" class="w-full bg-navy-900 border border-navy-700 rounded-xl px-3 py-2 text-sm text-white font-medium outline-none">
+                <option value="hot">폭염주의보 (체감온도 33℃ 이상)</option>
+                <option value="rain">집중호우 / 강우 후 지반 연약</option>
+                <option value="wind">강풍주의보 (순간풍속 10m/s 이상)</option>
+                <option value="cold">동절기 한파 / 결빙 미끄럼</option>
+                <option value="normal">보통 맑음 (일반 주간작업)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-300 mb-1">주요 작업 종</label>
+              <select id="tbm-task" class="w-full bg-navy-900 border border-navy-700 rounded-xl px-3 py-2 text-sm text-white font-medium outline-none">
+                <option value="crane">이동식 크레인 자재 인양작업</option>
+                <option value="pipe">지하 굴착 및 상하수도 배관 매설</option>
+                <option value="formwork">갱폼 인양 및 알폼 거푸집 조립</option>
+                <option value="fire">지하층 배관 용접 및 화기작업</option>
+                <option value="paint">밀폐공간 도장 및 방수공사</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-300 mb-1">참여 근로자 수</label>
+              <input id="tbm-count" type="number" value="12" min="1" max="200" class="w-full bg-navy-900 border border-navy-700 rounded-xl px-3 py-2 text-sm text-white font-medium outline-none">
+            </div>
+            <div class="flex items-end">
+              <button onclick="generateTbmScript()" class="w-full py-2 bg-gradient-to-r from-safety-green to-emerald-600 text-navy-950 font-black rounded-xl hover:opacity-90 transition text-sm flex items-center justify-center gap-2">
+                <i class="fa-solid fa-play"></i> TBM 가이드 생성
+              </button>
+            </div>
+          </div>
+
+          <!-- TBM 대본 카드 -->
+          <div id="tbm-result-card" class="bg-navy-900 border border-navy-700 rounded-2xl p-5 space-y-4">
+            <!-- JS 렌더링 -->
+          </div>
+        </div>
+
+        <!-- [에이전트 4]: 건설기계·가설구조물 법정점검 체크리스트 -->
+        <div id="agent-view-4" class="agent-panel hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-navy-800 gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded text-xs font-black bg-amber-400 text-navy-950 uppercase">AGENT 04</span>
+                <h3 class="text-lg sm:text-xl font-black text-white">건설기계 및 가설구조물 법정 일일·작업전 점검표</h3>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-400 mt-1">산업안전보건기준에 관한 규칙 제38조 작업계획서 및 사전점검 의무 조항 반영.</p>
+            </div>
+            <button onclick="printAgentResult('equipment-checklist-card', '건설기계가설구조물점검표')" class="px-3 py-1.5 text-xs bg-navy-800 hover:bg-navy-750 text-slate-200 border border-navy-700 rounded-lg flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-print"></i> 점검표 출력용 인쇄
+            </button>
+          </div>
+
+          <!-- 기종 탭 -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button onclick="renderEquipmentChecklist('tower')" class="equip-btn py-2.5 px-3 rounded-xl font-bold text-xs bg-navy-800 border border-navy-700 text-slate-300 hover:text-white transition flex items-center justify-center gap-2" id="equip-tower">
+              <i class="fa-solid fa-tower-observation text-safety-yellow"></i> 타워크레인
+            </button>
+            <button onclick="renderEquipmentChecklist('mobile_crane')" class="equip-btn py-2.5 px-3 rounded-xl font-bold text-xs bg-navy-800 border border-navy-700 text-slate-300 hover:text-white transition flex items-center justify-center gap-2" id="equip-mobile_crane">
+              <i class="fa-solid fa-truck-pickup text-safety-yellow"></i> 이동식 크레인
+            </button>
+            <button onclick="renderEquipmentChecklist('scaffold_sys')" class="equip-btn py-2.5 px-3 rounded-xl font-bold text-xs bg-navy-800 border border-navy-700 text-slate-300 hover:text-white transition flex items-center justify-center gap-2" id="equip-scaffold_sys">
+              <i class="fa-solid fa-bars-staggered text-safety-yellow"></i> 시스템 비계
+            </button>
+            <button onclick="renderEquipmentChecklist('earth_retention')" class="equip-btn py-2.5 px-3 rounded-xl font-bold text-xs bg-navy-800 border border-navy-700 text-slate-300 hover:text-white transition flex items-center justify-center gap-2" id="equip-earth_retention">
+              <i class="fa-solid fa-layer-group text-safety-yellow"></i> 흙막이 가시설
+            </button>
+          </div>
+
+          <div id="equipment-checklist-card" class="bg-navy-900 border border-navy-800 rounded-2xl p-4 sm:p-5">
+            <!-- JS 렌더링 -->
+          </div>
+        </div>
+
+        <!-- [에이전트 5]: 아차사고 재해사례 기반 맞춤 대책 추천기 -->
+        <div id="agent-view-5" class="agent-panel hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-navy-800 gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded text-xs font-black bg-rose-500 text-white uppercase">AGENT 05</span>
+                <h3 class="text-lg sm:text-xl font-black text-white">아차사고·중대재해 사례 기반 KOSHA 맞춤 재발방지대책 추천</h3>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-400 mt-1">현장에서 발생한 위험 징후를 선택하면 한국산업안전보건공단 데이터베이스 기반 원인 및 개선안 매칭.</p>
+            </div>
+          </div>
+
+          <!-- 사고 유형 셀렉트 -->
+          <div class="flex flex-wrap gap-2">
+            <button onclick="loadAccidentCase('fall')" class="accident-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-navy-800 text-slate-200 border border-navy-700 hover:border-safety-orange transition">
+              🪜 추락 (떨어짐)
+            </button>
+            <button onclick="loadAccidentCase('hit')" class="accident-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-navy-800 text-slate-200 border border-navy-700 hover:border-safety-orange transition">
+              🧱 낙하·비래 (맞음)
+            </button>
+            <button onclick="loadAccidentCase('jam')" class="accident-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-navy-800 text-slate-200 border border-navy-700 hover:border-safety-orange transition">
+              ⚙️ 협착 (끼임)
+            </button>
+            <button onclick="loadAccidentCase('collapse')" class="accident-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-navy-800 text-slate-200 border border-navy-700 hover:border-safety-orange transition">
+              🏗️ 붕괴·도괴 (무너짐)
+            </button>
+            <button onclick="loadAccidentCase('asphyxia')" class="accident-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-navy-800 text-slate-200 border border-navy-700 hover:border-safety-orange transition">
+              ☣️ 질식·중독 (밀폐공간)
+            </button>
+          </div>
+
+          <div id="accident-case-content" class="bg-navy-900 border border-navy-800 rounded-2xl p-5 space-y-4">
+            <!-- JS 렌더링 -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 에이전트 하단 지원 안내문 -->
+      <div class="mt-4 p-4 rounded-2xl bg-navy-950/60 border border-navy-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-3">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-circle-info text-safety-yellow"></i>
+          <span>본 5대 AI 에이전트는 샘플 엔진입니다. 정식 컨설팅 계약 시 현장 설계도면 및 시방서를 직접 반영한 특화 알고리즘이 적용됩니다.</span>
+        </div>
+        <button onclick="openConsultModal('AI 안전 시스템 커스텀 도입 문의')" class="text-safety-yellow hover:underline font-bold whitespace-nowrap">
+          현장 전용 AI 도입 상담 &rarr;
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 전문 컨설팅 서비스 안내 ================= -->
+  <section id="services" class="py-14 md:py-20 bg-navy-950 border-b border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="px-3 py-1 text-xs font-black uppercase tracking-wider bg-safety-orange/10 text-safety-orange rounded-full border border-safety-orange/30">
+          Professional Services
+        </span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-white mt-3">
+          건설안전기술사 홍길동의 핵심 컨설팅 영역
+        </h2>
+        <p class="text-sm sm:text-base text-slate-300 mt-2">
+          형식적인 서류작업은 지양합니다. 고용노동부 감독관 점검과 국토부 정기안전점검을 막힘없이 통과하는 검증된 실무 솔루션을 제공합니다.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- 서비스 1 -->
+        <div class="bg-navy-900 border border-navy-800 hover:border-safety-yellow/60 rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-navy-800 group-hover:bg-safety-yellow group-hover:text-navy-950 text-safety-yellow flex items-center justify-center text-xl transition-all mb-5">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">중대재해처벌법 종합진단</h3>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+              본사 및 현장 16개 핵심의무사항 이행 점검, 안전보건예산 적정성 평가, CSO(안전총괄책임자) 면책 논리 및 문서화 체계 완비.
+            </p>
+            <ul class="text-xs text-slate-300 space-y-1.5 mb-6">
+              <li class="flex items-center gap-1.5"><i class="fa-solid fa-check text-safety-green text-[10px]"></i> 법적 의무 이행 갭(Gap) 분석</li>
+              <li class="flex items-center gap-1.5"><i class="fa-solid fa-check text-safety-green text-[10px]"></i> 수급업체 적격성 평가 프로세스</li>
+              <li class="flex items-center gap-1.5"><i class="fa-solid fa-check text-safety-green text-[10px]"></i> 노동부 점검 사전 모의감사</li>
+            </ul>
+          </div>
+          <button onclick="openConsultModal('중대재해처벌법 종합진단 문의')" class="w-full py-2.5 bg-navy-800 hover:bg-navy-700 text-safety-yellow font-bold text-xs rounded-xl border border-navy-700 transition">
+            견적 문의 &rarr;
+          </button>
+        </div>
+
+        <!-- 서비스 2 -->
+        <div class="bg-navy-900 border border-navy-800 hover:border-safety-orange/60 rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-navy-800 group-hover:bg-safety-orange group-hover:text-navy-950 text-safety-orange flex items-center justify-center text-xl transition-all mb-5">
+              <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">위험성평가 체계 재구축</h3>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+              근로자가 실제로 참여하는 상시평가 체계 전환(개편 고시 완벽 반영). 정기·수시·상시 TBM 연계 실무형 가이드라인 수립.
+            </p>
+            <ul class="text-xs text-slate-300 space-y-1.5 mb-6">
+              <li class="flex items-center gap-1.5"><i class="fa-solid fa-check text-safety-green text-[10px]"></i> 3단계 판단법 / 체크리스트법 도입</li>
+              <li class="flex items-center gap-1.5"><i class="fa-solid fa-check text-safety-green text-[10px]"></i> 관리감독자/근로자 참여 표준화</li>
+              <li class="flex items-center gap-1.5"><i class="fa-solid fa-check text-safety-green text-[10px]"></i> KOSHA 인정평가 획득 지원</li>
+            </ul>
+          </div>
+          <button onclick="openConsultModal('위험성평가 체계 재구축 문의')" class="w-full py-2.5 bg-navy-800 hover:bg-navy-700 text-safety-orange font-bold text-xs rounded-xl border border-navy-700 transition">
+            견적 문의 &rarr;
+          </button>
+        </div>
+
+        <!-- 서비스 3 -->
+        <div class="bg-navy-900 border border-navy-800 hover:border-safety-green/60 rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-navy-800 group-hover:bg-safety-green group-hover:text-navy-950 text-safety-green flex items-center justify-center text-xl transition-all mb-5">
+              <i class="fa-solid fa-file-shield"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">안전관리계획서 수립·검토</h3>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+              건설기술진흥법 제62조에 따른 안전관리계획서 작성 및 국토안전관리원(CSI) 적정 판정 전문 대행. 가설구조물 구조계산서 검토.
+            </p>
+            <ul class="text-xs text-slate-300 space-y-1.5 mb-6">
+              <li class="flex items-center gap-1.5"><i class="fa-solid fa-check text-safety-green text-[10px]"></i> CSI 보완 최소화 원패스 승인</li>
+              <li class="flex items-center gap-1.5"><i class="fa-solid fa-check text-safety-green text-[10px]"></i> 가설구조물(비계, 동바리) 검토</li>
+              <li class="flex items-center gap-1.5"><i class="fa-solid fa-check text-safety-green text-[10px]"></i> 초기/정기안전점검 기관 연계</li>
+            </ul>
+          </div>
+          <button onclick="openConsultModal('안전관리계획서 수립/검토 문의')" class="w-full py-2.5 bg-navy-800 hover:bg-navy-700 text-safety-green font-bold text-xs rounded-xl border border-navy-700 transition">
+            견적 문의 &rarr;
+          </button>
+        </div>
+
+        <!-- 서비스 4 -->
+        <div class="bg-navy-900 border border-navy-800 hover:border-safety-red/60 rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-navy-800 group-hover:bg-safety-red group-hover:text-white text-safety-red flex items-center justify-center text-xl transition-all mb-5">
+              <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">기술사 현장 안전교육·코칭</h3>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+              형식적 동영상 시청이 아닌 현장 맞춤형 위험요소 순회지도 및 관리감독자 실무 법정교육 직접 출강. 외국인 근로자 시각화 교육.
+            </p>
+            <ul class="text-xs text-slate-300 space-y-1.5 mb-6">
+              <li class="flex items-center gap-1.5"><i class="fa-solid fa-check text-safety-green text-[10px]"></i> 관리감독자 법정의무교육(16시간)</li>
+              <li class="flex items-center gap-1.5"><i class="fa-solid fa-check text-safety-green text-[10px]"></i> 현장 소장·공무 대상 처벌법 특강</li>
+              <li class="flex items-center gap-1.5"><i class="fa-solid fa-check text-safety-green text-[10px]"></i> 1:1 안전관리자 멘토링</li>
+            </ul>
+          </div>
+          <button onclick="openConsultModal('현장 맞춤 안전교육 문의')" class="w-full py-2.5 bg-navy-800 hover:bg-navy-700 text-rose-400 font-bold text-xs rounded-xl border border-navy-700 transition">
+            견적 문의 &rarr;
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 최근 수행 실적 및 고객사 ================= -->
+  <section id="portfolio" class="py-12 md:py-16 bg-navy-900 border-b border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div>
+          <span class="text-xs font-bold text-safety-yellow uppercase">Proven Track Record</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-white mt-1">주요 컨설팅 및 안전진단 수행 사례</h2>
+        </div>
+        <div class="text-xs text-slate-400">최근 3년간 대형·중견 건설사 및 공공기관 80여 프로젝트 완료</div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="bg-navy-950 border border-navy-800 p-5 rounded-2xl">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+            <span>대형 물류센터 신축 (연면적 4만평)</span>
+            <span class="text-safety-green font-bold">무재해 준공</span>
+          </div>
+          <h4 class="font-bold text-white text-base mb-2">PC 부재 인양 및 고소 철골작업 중점관리</h4>
+          <p class="text-xs text-slate-400 leading-relaxed mb-3">
+            고소작업차 추락 방지 특별대책 및 양중계획서 검토로 고위험 공종 14개월간 사고 0건 달성.
+          </p>
+          <div class="text-[11px] text-safety-yellow font-medium">#양중계획 #철골추락방지 #위험성평가</div>
+        </div>
+
+        <div class="bg-navy-950 border border-navy-800 p-5 rounded-2xl">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+            <span>서울 도심지 지하철 환승역사 개량</span>
+            <span class="text-safety-green font-bold">노동부 점검 통과</span>
+          </div>
+          <h4 class="font-bold text-white text-base mb-2">지하 심도 30m 흙막이 가시설 및 인접구조물 변위 진단</h4>
+          <p class="text-xs text-slate-400 leading-relaxed mb-3">
+            계측데이터 기반 붕괴 위험요인 실시간 알람 체계 수립 및 도심지 보행자 안전통로 설계 컨설팅.
+          </p>
+          <div class="text-[11px] text-safety-yellow font-medium">#흙막이안전 #도심지공사 #밀폐공간</div>
+        </div>
+
+        <div class="bg-navy-950 border border-navy-800 p-5 rounded-2xl">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+            <span>중견 종합건설사 본사 안전보건체계</span>
+            <span class="text-safety-green font-bold">ISO 45001 인증</span>
+          </div>
+          <h4 class="font-bold text-white text-base mb-2">중대재해처벌법 대응 전사 안전매뉴얼 표준화</h4>
+          <p class="text-xs text-slate-400 leading-relaxed mb-3">
+            전국 18개 현장 일원화된 모바일 TBM 프로세스 구축 및 협력업체 안전보건수준평가 제도 안착.
+          </p>
+          <div class="text-[11px] text-safety-yellow font-medium">#중처법시스템 #협력업체평가 #CSO자문</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 푸터 ================= -->
+  <footer class="bg-navy-950 border-t border-navy-800 text-slate-400 py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 pb-8 border-b border-navy-900">
+        
+        <div class="md:col-span-5 space-y-3">
+          <div class="flex items-center gap-2 text-white font-black text-lg">
+            <i class="fa-solid fa-helmet-safety text-safety-orange"></i>
+            안전프로 (SafePro) 건설안전컨설팅
+          </div>
+          <p class="text-xs leading-relaxed text-slate-400">
+            건설안전기술사 홍길동 사무소 | 사업자등록번호: 123-45-67890<br/>
+            주소: 서울특별시 영등포구 여의대로 (전국 현장 방문 컨설팅 지원)<br/>
+            이메일: safepro.hong@example.com | 직통전화: 010-1234-5678
+          </p>
+          <p class="text-[11px] text-slate-400">
+            ※ 건설산업기본법, 산업안전보건법, 중대재해처벌법 관련 공식 자격 기준 준수
+          </p>
+        </div>
+
+        <div class="md:col-span-4 space-y-2">
+          <div class="text-xs font-bold text-white uppercase tracking-wider">주요 상담 서비스 바로가기</div>
+          <ul class="text-xs space-y-1 text-slate-400">
+            <li><a href="javascript:void(0)" onclick="openConsultModal('위험성평가')" class="hover:text-safety-yellow">· KOSHA 고시 위험성평가 컨설팅</a></li>
+            <li><a href="javascript:void(0)" onclick="openConsultModal('안전관리계획서')" class="hover:text-safety-yellow">· 건설기술진흥법 안전관리계획서 국토원 검토</a></li>
+            <li><a href="javascript:void(0)" onclick="openConsultModal('중처법 자문')" class="hover:text-safety-yellow">· 중대재해처벌법 안전보건관리체계 정기 자문</a></li>
+            <li><a href="javascript:void(0)" onclick="openConsultModal('가설구조물 점검')" class="hover:text-safety-yellow">· 가설구조물 및 양중장비 사전 안전성 검토</a></li>
+          </ul>
+        </div>
+
+        <div class="md:col-span-3 flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-bold text-white uppercase tracking-wider mb-2">프리랜서 직통 긴급 연락처</div>
+            <div class="text-lg font-black text-safety-yellow">010-1234-5678</div>
+            <div class="text-xs text-slate-400 mt-1">평일·주말 현장 긴급사고 대응 24시간</div>
+          </div>
+          <button onclick="openConsultModal('홈페이지 푸터 간편 상담')" class="mt-3 w-full py-2 bg-navy-800 hover:bg-navy-700 text-xs font-bold text-slate-200 rounded-lg border border-navy-700 transition">
+            온라인 견적 문의 접수
+          </button>
+        </div>
+
+      </div>
+
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-2">
+        <div>© 2026 SafePro Hong Gil-Dong. All Rights Reserved.</div>
+        <div class="flex gap-4">
+          <a href="#" class="hover:text-slate-400">개인정보처리방침</a>
+          <a href="#" class="hover:text-slate-400">이용약관</a>
+          <a href="#" class="hover:text-slate-400">컨설팅 표준계약서 양식</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= 모바일 전용 하단 고정 탭바 (웹앱 최적화) ================= -->
+  <div class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-navy-900/95 backdrop-blur border-t border-navy-700 px-3 py-2 flex items-center justify-around">
+    <button onclick="scrollToSection('hero')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-safety-yellow">
+      <i class="fa-solid fa-house text-base"></i>
+      <span class="text-[10px] font-bold">홈</span>
+    </button>
+    <button onclick="scrollToSection('agents-section'); switchAgent(1);" class="flex flex-col items-center gap-1 text-safety-yellow">
+      <i class="fa-solid fa-robot text-base"></i>
+      <span class="text-[10px] font-bold">5대 에이전트</span>
+    </button>
+    <button onclick="scrollToSection('services')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-safety-yellow">
+      <i class="fa-solid fa-briefcase text-base"></i>
+      <span class="text-[10px] font-bold">서비스</span>
+    </button>
+    <a href="tel:010-1234-5678" class="flex flex-col items-center gap-1 text-safety-green">
+      <i class="fa-solid fa-phone text-base"></i>
+      <span class="text-[10px] font-bold">전화</span>
+    </a>
+    <button onclick="openConsultModal()" class="flex flex-col items-center gap-1 text-safety-orange">
+      <i class="fa-solid fa-file-pen text-base"></i>
+      <span class="text-[10px] font-bold">견적요청</span>
+    </button>
+  </div>
+
+  <!-- ================= 실시간 컨설팅 견적 및 상담 모달 ================= -->
+  <div id="consultModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200">
+    <div class="bg-navy-900 border-2 border-safety-orange/50 rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-7 shadow-2xl relative">
+      
+      <!-- 닫기 버튼 -->
+      <button onclick="closeConsultModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-navy-800 text-slate-400 hover:text-white flex items-center justify-center border border-navy-700 transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center gap-2 mb-1">
+        <span class="w-2.5 h-2.5 rounded-full bg-safety-green"></span>
+        <span class="text-xs font-bold text-safety-yellow uppercase tracking-wider">Fast-Track Consulting</span>
+      </div>
+      <h3 class="text-xl sm:text-2xl font-black text-white">건설안전 컨설팅 의뢰 & 예상 견적</h3>
+      <p class="text-xs text-slate-400 mb-5">정보를 남겨주시면 홍길동 기술사가 30분 이내 직접 연락드립니다.</p>
+
+      <form id="consultForm" onsubmit="handleConsultSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">성함 / 직함 *</label>
+          <input type="text" id="consult-name" required placeholder="예: 김현장 현장소장 / 안전팀장" class="w-full bg-navy-950 border border-navy-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:ring-2 focus:ring-safety-orange outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">연락처 *</label>
+            <input type="tel" id="consult-tel" required placeholder="010-0000-0000" class="w-full bg-navy-950 border border-navy-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:ring-2 focus:ring-safety-orange outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">회사명 / 현장명</label>
+            <input type="text" id="consult-company" placeholder="예: (주)안전건설 세종현장" class="w-full bg-navy-950 border border-navy-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:ring-2 focus:ring-safety-orange outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">필요 컨설팅 분야 (복수 선택 가능)</label>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <label class="flex items-center gap-2 p-2 bg-navy-950 rounded-lg border border-navy-800 cursor-pointer">
+              <input type="checkbox" name="consult-service" value="중처법 진단" class="accent-amber-500" checked>
+              <span class="text-slate-300">중처법 점검 체계</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-navy-950 rounded-lg border border-navy-800 cursor-pointer">
+              <input type="checkbox" name="consult-service" value="위험성평가" class="accent-amber-500" checked>
+              <span class="text-slate-300">위험성평가 수립</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-navy-950 rounded-lg border border-navy-800 cursor-pointer">
+              <input type="checkbox" name="consult-service" value="안전관리계획서" class="accent-amber-500">
+              <span class="text-slate-300">안전관리계획서 작성</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-navy-950 rounded-lg border border-navy-800 cursor-pointer">
+              <input type="checkbox" name="consult-service" value="현장 안전점검/교육" class="accent-amber-500">
+              <span class="text-slate-300">기술사 직접점검·교육</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">공사 규모 / 특이사항</label>
+          <textarea id="consult-detail" rows="3" placeholder="예: 공사금액 120억, 지하 2층~지상 10층 근린생활시설, 착공 전 CSI 승인 및 위험성평가 컨설팅 희망" class="w-full bg-navy-950 border border-navy-700 rounded-xl px-3.5 py-2 text-sm text-white focus:ring-2 focus:ring-safety-orange outline-none"></textarea>
+        </div>
+
+        <!-- 예상 견적 가이드 바 -->
+        <div class="bg-navy-950 p-3 rounded-xl border border-navy-800 text-xs flex items-center justify-between">
+          <span class="text-slate-400">초기 1회 사전 현장 방문 진단:</span>
+          <span class="text-safety-yellow font-black">무료 또는 협의 지원 (프로모션)</span>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-safety-orange to-amber-500 hover:from-amber-400 hover:to-safety-yellow text-navy-950 font-black text-sm rounded-xl shadow-lg transition">
+          <i class="fa-solid fa-paper-plane mr-1.5"></i> 상담 및 견적서 요청하기
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 토스트 알림창 -->
+  <div id="toastMessage" class="fixed bottom-20 md:bottom-8 right-4 z-50 max-w-sm bg-navy-800 border-2 border-safety-yellow text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-32 opacity-0 transition-all duration-300 pointer-events-none">
+    <i class="fa-solid fa-circle-check text-safety-green text-xl"></i>
+    <div class="text-xs font-bold" id="toastText">성공적으로 복사되었습니다.</div>
+  </div>
+
+  <!-- 인쇄 전용 숨김 컨테이너 -->
+  <div id="printableArea" class="hidden"></div>
+
+  <!-- ================= 스크립트 로직 ================= -->
+  <script>
+    // ----------------- 네비게이션 스크롤 & 모달 유틸 -----------------
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function openConsultModal(defaultNote = '') {
+      const modal = document.getElementById('consultModal');
+      const detail = document.getElementById('consult-detail');
+      if (defaultNote && detail && !detail.value) {
+        detail.value = `[문의 항목]: ${defaultNote}\n`;
+      }
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+      }, 10);
+    }
+
+    function closeConsultModal() {
+      const modal = document.getElementById('consultModal');
+      modal.classList.add('opacity-0');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 200);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastMessage');
+      const text = document.getElementById('toastText');
+      text.innerText = msg;
+      toast.classList.remove('translate-y-32', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-32', 'opacity-0');
+      }, 2800);
+    }
+
+    function handleConsultSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('consult-name').value;
+      const tel = document.getElementById('consult-tel').value;
+      closeConsultModal();
+      showToast(`${name}님, 상담 신청이 접수되었습니다. 홍길동 기술사가 빠른 시간 내 연락드립니다!`);
+      document.getElementById('consultForm').reset();
+    }
+
+    function copyToClipboardFallback(text) {
+      const tempInput = document.createElement("textarea");
+      tempInput.style.position = "fixed";
+      tempInput.style.opacity = "0";
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+    }
+
+    // ----------------- 5대 에이전트 탭 스위처 -----------------
+    function switchAgent(index) {
+      // 탭 스타일 초기화
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`tab-btn-${i}`);
+        const view = document.getElementById(`agent-view-${i}`);
+        if (i === index) {
+          btn.className = "agent-tab flex-shrink-0 px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2.5 transition border bg-safety-orange text-navy-950 border-safety-yellow shadow-md";
+          view.classList.remove('hidden');
+        } else {
+          btn.className = "agent-tab flex-shrink-0 px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2.5 transition border bg-navy-800 text-slate-300 border-navy-700 hover:bg-navy-750";
+          view.classList.add('hidden');
+        }
+      }
+    }
+
+    // ----------------- [에이전트 1] 위험성평가 데이터 & 생성기 -----------------
+    const riskDB = {
+      scaffold: [
+        {
+          hazard: "비계 작업발판 설치 중 발판 미고정 상태에서 디딤으로 인한 추락 위험",
+          freq: 3, sev: 4, level: "상(12)",
+          measures: "작업발판 2개소 이상 철선 고정 철저, 안전대 부착설비(안전난간/구명줄) 체결 후 이동, 하부 2m 이내 추락방호망 설치"
+        },
+        {
+          hazard: "강관 파이프 및 클램프 양중 중 지상부 자재 낙하(비래)로 하부 근로자 충격",
+          freq: 2, sev: 4, level: "중(8)",
+          measures: "양중 시 인양함 또는 전용 달포대 사용, 하부 5m 반경 출입통제구역 설정 및 신호수 1명 필수 배치"
+        },
+        {
+          hazard: "벽이음 철물(Wall Tie) 설치 간격 기준 미준수로 강풍 시 비계 전도 위험",
+          freq: 2, sev: 5, level: "상(10)",
+          measures: "수직 5m / 수평 5.5m 이내 구조체 직결 벽이음 시공, 풍속 10m/s 이상 시 작업 즉각 중지"
+        }
+      ],
+      earthwork: [
+        {
+          hazard: "굴착 배면 토압 상승 및 우수 유입에 따른 흙막이 토류판 파괴 및 지반 붕괴",
+          freq: 2, sev: 5, level: "상(10)",
+          measures: "일일 경사계/변위계 계측 분석, 배수 펌프 상시 대기 및 굴착 법면 비닐 차수막 포설"
+        },
+        {
+          hazard: "0.8m³ 굴착기 후방 선회 반경 내 후진 중 배면 신호수 협착(끼임)",
+          freq: 3, sev: 4, level: "상(12)",
+          measures: "후방 어라운드뷰 및 접근경보센서 부착 확인, 전담 신호수 배치 및 안전거리 3m 유지"
+        },
+        {
+          hazard: "터파기 하부 진입 사다리 미설치로 경사면 미끄러짐 및 전도",
+          freq: 3, sev: 2, level: "중(6)",
+          measures: "깊이 1.5m 초과 시 전용 가설계단 또는 견고한 경사로 손잡이 설치"
+        }
+      ],
+      steel: [
+        {
+          hazard: "철골 보(Girder) 위 이동 중 중심 상실로 15m 하부 추락 위험",
+          freq: 3, sev: 5, level: "상(15)",
+          measures: "철골 주부재 상부 안전대 걸이용 와이어로프 설치, 2열 안전대(이중고리) 항시 체결, 하부 수평안전망 설치"
+        },
+        {
+          hazard: "고장력볼트 체결 중 체결공구 및 볼트 낙하로 직하부 근로자 가격",
+          freq: 2, sev: 4, level: "중(8)",
+          measures: "공구 낙하방지 끈(스트랩) 체결, 볼트 포켓 파우치 허리 착용, 하부 출입통제 구역 구획"
+        }
+      ],
+      concrete: [
+        {
+          hazard: "콘크리트 펌프카 타설 중 압송관 엔드호스 급격한 요동으로 타설공 타격",
+          freq: 3, sev: 4, level: "상(12)",
+          measures: "초기 타설 시 압송압력 저속 조절, 엔드호스 유동방지 안전로프 결속, 2인 1조 타설 원칙"
+        },
+        {
+          hazard: "슬래브 타설 중 거푸집 동바리 좌굴 및 편심 하중에 의한 붕괴 사고",
+          freq: 1, sev: 5, level: "중(5)",
+          measures: "구조검토서에 따른 수평연결재 2방향 체결 확인, 콘크리트 수평 분산타설 실시"
+        }
+      ],
+      electric: [
+        {
+          hazard: "고소작업대(렌탈) 과상승으로 상부 철골 트러스 구조물과 난간대 사이 협착",
+          freq: 3, sev: 5, level: "상(15)",
+          measures: "고소작업대 과상승 방지장치 4개 모서리 전수 작동 검사, 조작자 풋스위치 임의 해제 엄금"
+        },
+        {
+          hazard: "가설 분전함 누전차단기 불량 및 습윤 장소 전선 피복 손상으로 인한 감전",
+          freq: 2, sev: 4, level: "중(8)",
+          measures: "감전방지용 고감도 누전차단기(30mA, 0.03초) 작동 테스트, 접지 저항 100Ω 이하 준수"
+        }
+      ]
+    };
+
+    function generateRiskAssessment() {
+      const cat = document.getElementById('risk-category').value;
+      const subtask = document.getElementById('risk-subtask').value.trim() || "지정 작업";
+      const items = riskDB[cat] || riskDB.scaffold;
+
+      let html = `
+        <div class="mb-3 flex items-center justify-between">
+          <span class="text-xs font-bold text-safety-yellow flex items-center gap-1.5">
+            <i class="fa-solid fa-list-check"></i>
+            선택 공종: [${document.getElementById('risk-category').selectedOptions[0].text}] - 세부작업: "${subtask}"
+          </span>
+          <span class="text-[11px] text-slate-400">평가기준: 빈도(1~5) × 강도(1~5)</span>
+        </div>
+        <table class="w-full text-left text-xs text-slate-200 border-collapse">
+          <thead>
+            <tr class="bg-navy-950 text-slate-300 border-b border-navy-700">
+              <th class="p-2.5 font-bold w-12 text-center">No</th>
+              <th class="p-2.5 font-bold">잠재적 유해·위험요인 (Hazard)</th>
+              <th class="p-2.5 font-bold text-center w-28">위험도 (빈도x강도)</th>
+              <th class="p-2.5 font-bold">법정 감소대책 (안전보건규칙 및 KOSHA)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-navy-800">
+      `;
+
+      items.forEach((item, idx) => {
+        const isHigh = item.level.includes("상");
+        const badgeColor = isHigh ? "bg-red-500/20 text-red-400 border border-red-500/40" : "bg-amber-500/20 text-amber-400 border border-amber-500/40";
+        html += `
+          <tr class="hover:bg-navy-800/50 transition">
+            <td class="p-2.5 text-center font-bold text-slate-400">${idx + 1}</td>
+            <td class="p-2.5 font-semibold text-white leading-relaxed">${item.hazard}</td>
+            <td class="p-2.5 text-center">
+              <span class="px-2 py-0.5 rounded text-[11px] font-black ${badgeColor}">
+                ${item.level}
+              </span>
+              <div class="text-[10px] text-slate-400 mt-0.5">빈도${item.freq} × 강도${item.sev}</div>
+            </td>
+            <td class="p-2.5 text-slate-300 leading-relaxed">${item.measures}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+        <div class="mt-3 pt-3 border-t border-navy-800 flex justify-between items-center text-[11px] text-slate-400">
+          <span>* 본 표는 중대재해처벌법 제4조(안전보건관리체계) 및 산안법 제36조에 준하여 작성되었습니다.</span>
+          <span class="text-safety-yellow font-bold">감수: 건설안전기술사 홍길동</span>
+        </div>
+      `;
+
+      document.getElementById('agent-1-output').innerHTML = html;
+    }
+
+    function copyTableText(id) {
+      const el = document.getElementById(id);
+      copyToClipboardFallback(el.innerText);
+      showToast("위험성평가표 텍스트가 클립보드에 복사되었습니다.");
+    }
+
+    function printAgentResult(elementId, title) {
+      const content = document.getElementById(elementId).innerHTML;
+      const printArea = document.getElementById('printableArea');
+      printArea.innerHTML = `
+        <div style="padding: 20px; font-family: sans-serif;">
+          <h1 style="font-size: 20px; border-bottom: 2px solid #000; padding-bottom: 8px;">[안전프로 SafePro] ${title}</h1>
+          <p style="font-size: 11px; color: #555;">작성·검토: 건설안전기술사 홍길동 | 일시: ${new Date().toLocaleDateString('ko-KR')}</p>
+          <div style="margin-top: 15px;">${content}</div>
+        </div>
+      `;
+      window.print();
+    }
+
+    // ----------------- [에이전트 2] 중대재해처벌법 자가진단 -----------------
+    const csapQuestions = [
+      { id: 1, text: "경영방침 및 전사 안전보건 목표가 공식 문서로 수립·전파되어 있는가?", weight: 15, checked: true },
+      { id: 2, text: "총 공사규모에 적합한 안전관리자/보건관리자 법정 인원이 정규 배치되었는가?", weight: 20, checked: true },
+      { id: 3, text: "현장 유해·위험요인 확인 및 개선(위험성평가)을 반기 1회 이상 이행·점검하는가?", weight: 20, checked: true },
+      { id: 4, text: "도급·용역·위탁 시 협력사 안전보건수준평가 기준을 갖추고 적격업체를 선정하는가?", weight: 15, checked: false },
+      { id: 5, text: "종사자의 의견 청취 절차(산업안전보건위원회/노사협의체)가 실질 가동되고 개선안을 피드백하는가?", weight: 15, checked: false },
+      { id: 6, text: "중대재해 발생 시 비상대응 매뉴얼 수립 및 분기별 1회 이상 실제 훈련을 실시하는가?", weight: 15, checked: true }
+    ];
+
+    function initCsapQuiz() {
+      const cont = document.getElementById('csap-questions');
+      cont.innerHTML = csapQuestions.map((q, idx) => `
+        <label class="flex items-start gap-3 p-3 bg-navy-900 border border-navy-800 rounded-xl cursor-pointer hover:border-slate-600 transition">
+          <input type="checkbox" id="csap-q-${q.id}" onchange="calculateCsapScore()" ${q.checked ? 'checked' : ''} class="mt-1 w-4 h-4 accent-safety-orange rounded">
+          <div class="text-xs sm:text-sm">
+            <span class="text-slate-400 font-bold mr-1">항목 ${idx + 1}.</span>
+            <span class="text-slate-200 font-medium">${q.text}</span>
+            <span class="text-[11px] text-safety-yellow ml-1 font-bold">(${q.weight}점)</span>
+          </div>
+        </label>
+      `).join('');
+      calculateCsapScore();
+    }
+
+    function calculateCsapScore() {
+      let total = 0;
+      let uncheckedItems = [];
+
+      csapQuestions.forEach(q => {
+        const chk = document.getElementById(`csap-q-${q.id}`);
+        if (chk && chk.checked) {
+          total += q.weight;
+        } else {
+          uncheckedItems.push(q.text.split('?')[0]);
+        }
+      });
+
+      const scoreEl = document.getElementById('csap-score-num');
+      const progEl = document.getElementById('csap-progress');
+      const badgeEl = document.getElementById('csap-badge');
+      const feedbackEl = document.getElementById('csap-feedback');
+
+      scoreEl.innerText = total;
+      progEl.style.width = `${total}%`;
+
+      if (total >= 85) {
+        badgeEl.className = "ml-auto px-3 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+        badgeEl.innerText = "우수 (안정권)";
+        feedbackEl.innerText = "법적 6대 핵심의무 기본 체계가 양호합니다. 정기적인 이행 증빙 기록(사진, 서명부) 보존에 주력하여 감독관 점검에 대비하세요.";
+      } else if (total >= 60) {
+        badgeEl.className = "ml-auto px-3 py-1 rounded-full text-xs font-black bg-amber-500/20 text-amber-400 border border-amber-500/40";
+        badgeEl.innerText = "주의 요망 (취약)";
+        feedbackEl.innerText = `현재 [${uncheckedItems[0] || '의무사항'}] 관련 체계가 미비합니다. 중대재해 발생 시 경영책임자 입증 책임 위반으로 직결되므로 홍길동 기술사의 1:1 보완 컨설팅을 권장합니다.`;
+      } else {
+        badgeEl.className = "ml-auto px-3 py-1 rounded-full text-xs font-black bg-rose-500/20 text-rose-400 border border-rose-500/40";
+        badgeEl.innerText = "심각 (즉시 조치)";
+        feedbackEl.innerText = "핵심 법적 의무가 다수 결여되어 있습니다. 고용노동부 불시감독 시 작업중지명령 및 과태료 부과 대상이며, 사망사고 시 즉시 입건 대상입니다. 긴급 처방이 필요합니다.";
+      }
+    }
+
+    // ----------------- [에이전트 3] 스마트 TBM 가이드 생성기 -----------------
+    const tbmTemplates = {
+      hot: {
+        envAlert: "🚨 [기상특보] 폭염경보 발령 (체감온도 34℃ 이상)",
+        rules: "매시간 15분 이상 그늘 휴식 부여, 시원한 음료/식염포도당 섭취, 온열질환(어지럼증) 발생 즉시 작업 중단 및 휴게실 이동"
+      },
+      rain: {
+        envAlert: "🌧️ [기상특보] 우천 후 지반 연약화 및 감전 위험 주의보",
+        rules: "굴착 배면 토사 붕괴 징후 확인, 옥외 전동공구 및 이동전선 침수 여부 점검 후 투입, 경사로 미끄럼 방지 논슬립 테이프 확인"
+      },
+      wind: {
+        envAlert: "💨 [기상특보] 강풍주의보 (순간최대풍속 10m/s 초과)",
+        rules: "순간풍속 10m/s 이상 시 타워크레인 설치/해체 중지, 15m/s 이상 시 모든 양중작업 전면 중단, 가설 울타리 및 낙하물 방지망 결속상태 점검"
+      },
+      cold: {
+        envAlert: "❄️ [기상특보] 한파주의보 및 결빙 낙상 경보",
+        rules: "비계 발판 및 가설통로 살얼음 제거 후 작업 개시, 핫팩 지급 및 1시간 주기 보온 휴게실 이용, 옥외 콘크리트 양생용 갈탄/열풍기 일산화탄소 중독 엄격 방지"
+      },
+      normal: {
+        envAlert: "☀️ [일반기상] 주간 양호 기상 (기본 안전수칙 준수)",
+        rules: "개인보호구(안전모 턱끈, 안전대 2중고리, 안전화) 착용 100% 점검, 작업장 상하 동시작업 절대 금지"
+      }
+    };
+
+    const tbmTaskGuides = {
+      crane: {
+        name: "이동식 크레인 양중작업",
+        points: ["인양하중표(Load Chart) 준수 및 아웃트리거 지반 침목 4개소 완전 전개", "와이어로프 소선 단선 및 꼬임 상태 점검, 2줄 걸이 원칙 준수", "인양 회전 반경 내 근로자 출입 차단 라인 설치 및 전담 유도원 배치"],
+        slogan: "양중작업 반경에는 한 걸음도 들어가지 않는다! 안전제일!"
+      },
+      pipe: {
+        name: "지하 굴착 및 상하수도 배관 매설",
+        points: ["굴착 깊이 1.5m 초과 시 흙막이 지보공 또는 안전 기울기(1:1.0) 확보", "작업자 승강을 위한 전용 사다리 진출입로 설치 확인", "지하 가스관·고압전선 매설물 탐사 결과 표지판 육안 대조"],
+        slogan: "흙막이 확인 전에는 터파기에 들어가지 않는다!"
+      },
+      formwork: {
+        name: "갱폼 인양 및 거푸집 조립",
+        points: ["타워크레인 인양 와이어 긴장 상태에서 갱폼 고정볼트 해체 실시", "하부 낙하물 방호선반 및 안전망 훼손 부위 즉시 보수", "외부 난간대 및 수직보호망 틈새 자재 낙하 엄금"],
+        slogan: "고소작업 안전고리는 내 생명줄이다! 체결 확인!"
+      },
+      fire: {
+        name: "지하층 배관 용접 및 화기작업",
+        points: ["반경 11m 이내 가연물 완전 제거 및 방염포(불티받이포) 밀착 설치", "화재감시자 현장 전담 배치 및 ABC 분말소화기 2대 배치 확인", "가스용기 역화방지기 장착 및 전도방지 체인 결속"],
+        slogan: "불티 하나가 대형 참사! 소화기 위치 확인 완료!"
+      },
+      paint: {
+        name: "밀폐공간 도장 및 방수작업",
+        points: ["작업 전/작업 중 산소농도(18%~23.5%) 및 유해가스 농도 연속 측정", "송기마스크 또는 방독마스크 의무 착용 및 급기·배기팬 가동", "감시인 외부 배치 및 긴급 무전 통신망 상시 유지"],
+        slogan: "환기 없이 들어가지 않는다! 산소농도 측정 완료!"
+      }
+    };
+
+    let currentTbmScript = "";
+
+    function generateTbmScript() {
+      const weatherKey = document.getElementById('tbm-weather').value;
+      const taskKey = document.getElementById('tbm-task').value;
+      const count = document.getElementById('tbm-count').value || 10;
+
+      const weather = tbmTemplates[weatherKey];
+      const task = tbmTaskGuides[taskKey];
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일`;
+
+      const card = document.getElementById('tbm-result-card');
+
+      currentTbmScript = `[홍길동 기술사 감수] 오늘의 모바일 TBM 3분 브리핑
+■ 일자: ${dateStr} (참여인원: ${count}명)
+■ 주요 공종: ${task.name}
+■ 기상 영향: ${weather.envAlert}
+
+1. 기상/환경 특별 조치:
+${weather.rules}
+
+2. 오늘의 3대 중점 안전점검사항:
+- ${task.points[0]}
+- ${task.points[1]}
+- ${task.points[2]}
+
+3. 오늘의 안전구호:
+"${task.slogan}"`;
+
+      card.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-navy-800 gap-2">
+          <div>
+            <span class="text-xs font-bold text-safety-green flex items-center gap-1.5">
+              <i class="fa-solid fa-clock"></i> 오늘의 TBM 현장 브리핑 스크립트 (${dateStr})
+            </span>
+            <div class="text-xs text-slate-400 mt-0.5">참여 인원: ${count}명 | 담당 반장 및 관리감독자 낭독용</div>
+          </div>
+          <span class="px-2.5 py-1 rounded bg-navy-800 text-safety-yellow text-xs font-black self-start sm:self-auto border border-navy-700">
+            3분 소요
+          </span>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-navy-950/80 border border-navy-800 space-y-3 text-xs sm:text-sm">
+          <div>
+            <div class="font-bold text-rose-400 text-xs mb-1">${weather.envAlert}</div>
+            <p class="text-slate-300 leading-relaxed">${weather.rules}</p>
+          </div>
+
+          <div class="pt-2 border-t border-navy-800">
+            <div class="font-bold text-safety-yellow text-xs mb-1.5 flex items-center gap-1.5">
+              <i class="fa-solid fa-triangle-exclamation"></i> [${task.name}] 3대 핵심 확인사항:
+            </div>
+            <ul class="space-y-1 text-slate-200">
+              <li class="flex items-start gap-1.5"><span class="text-safety-orange font-bold">1.</span> ${task.points[0]}</li>
+              <li class="flex items-start gap-1.5"><span class="text-safety-orange font-bold">2.</span> ${task.points[1]}</li>
+              <li class="flex items-start gap-1.5"><span class="text-safety-orange font-bold">3.</span> ${task.points[2]}</li>
+            </ul>
+          </div>
+
+          <div class="pt-2 border-t border-navy-800 bg-safety-orange/10 p-3 rounded-lg border border-safety-orange/30">
+            <div class="text-xs text-safety-orange font-bold mb-1">📢 전원 복창 안전구호:</div>
+            <div class="text-sm font-black text-white">"${task.slogan}"</div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-1 text-xs text-slate-400">
+          <span>* TBM 후 작업자 전원 서명부는 현장 안전보건일지에 첨부 보관하십시오.</span>
+          <button onclick="copyTbmText()" class="text-safety-yellow hover:underline font-bold">
+            <i class="fa-solid fa-copy mr-1"></i>대본 복사
+          </button>
+        </div>
+      `;
+    }
+
+    function copyTbmText() {
+      if (!currentTbmScript) {
+        generateTbmScript();
+      }
+      copyToClipboardFallback(currentTbmScript);
+      showToast("TBM 대본이 클립보드에 복사되었습니다. 단톡방/현장 서류에 붙여넣으세요.");
+    }
+
+    // ----------------- [에이전트 4] 건설기계·가설구조 점검표 -----------------
+    const equipmentData = {
+      tower: {
+        title: "타워크레인 (Tower Crane) 작업 전 법정 점검표",
+        law: "산업안전보건기준에 관한 규칙 제142조 / 건설기계관리법",
+        items: [
+          { check: "과부하방지장치, 권과방지장치(Hook 상한), 비상정지장치 작동 여부", req: "리밋스위치 작동 시 자동 차단 확인", state: "양호" },
+          { check: "권상 및 기브 와이어로프의 마모, 소선 단선(10% 이내), 부식 상태", req: "공칭지름 감소율 7% 이내", state: "양호" },
+          { check: "마스트 텔레스코핑 핀, 앵커 볼트 체결 토크 및 풀림 여부", req: "토크렌치 점검치 표기", state: "양호" },
+          { check: "선회 브레이크 및 트롤리 이동 리밋 스위치 정상 작동", req: "선회 락킹 해제 테스트", state: "양호" },
+          { check: "기상계(풍속계) 지침 정상 작동 및 경보음 송출 확인", req: "10m/s, 15m/s 단계별 경보", state: "양호" }
+        ]
+      },
+      mobile_crane: {
+        title: "이동식 크레인 (카고/하이드로) 작업 전 점검표",
+        law: "산업안전보건기준에 관한 규칙 제86조",
+        items: [
+          { check: "아웃트리거 4개소 완전 인출 및 지반 침목 설치(접지압 분산)", req: "연약지반 시 철판 보강 필수", state: "양호" },
+          { check: "차량 수평계 기포 정중앙 일치 상태", req: "수평오차 1도 이내 유지", state: "양호" },
+          { check: "훅 해지장치(안전래치) 스프링 탄성 및 이탈 방지", req: "줄걸이 로프 이탈 방지", state: "양호" },
+          { check: "AML(모멘트 리미터) 및 과부하방지센서 임의 해제 여부", req: "경보장치 차단 엄금", state: "양호" },
+          { check: "운전원 면허 소지 및 건설기계 정기검사 유효기간", req: "조종사 면허증 원본 대조", state: "양호" }
+        ]
+      },
+      scaffold_sys: {
+        title: "시스템 비계 (System Scaffolding) 법정 조립 점검표",
+        law: "산업안전보건기준에 관한 규칙 제59조 ~ 제60조",
+        items: [
+          { check: "지주(수직재) 하부 베이스플레이트 및 깔판(받침목) 침하 방지", req: "지반 다짐 후 2점 고정", state: "양호" },
+          { check: "수직재-수평재 결속 쐐기 핀 완전 타격 체결 상태", req: "전용 햄머로 록킹 확인", state: "양호" },
+          { check: "대각선 가새(Bracing) 전면 및 측면 규정 각도(40~60도) 설치", req: "매 5스팬마다 연속 설치", state: "양호" },
+          { check: "벽이음(Wall Tie) 설치 간격 (수직/수평 5m 이내 구조체 정착)", req: "창틀 등 임의 결속 금지", state: "양호" },
+          { check: "작업발판 틈새 3cm 이하 및 상·하부 안전난간(90cm, 45cm) 완비", req: "발판 탈락 방지 고리 체결", state: "양호" }
+        ]
+      },
+      earth_retention: {
+        title: "흙막이 가시설 (H-Pile + 토류판 / CIP) 점검표",
+        law: "산업안전보건기준에 관한 규칙 제338조 ~ 제346조",
+        items: [
+          { check: "토류판 배면 공극 채움(그라우팅/토사 밀실 뒤채움) 여부", req: "공극 방치 시 지반 침하 발생", state: "양호" },
+          { check: "띠장(Wale) 및 스트럿(Strut) 접합부 볼트 조임 및 용접 상태", req: "스티프너 보강판 확인", state: "양호" },
+          { check: "스크류 잭(Screw Jack) 가압력 유지 및 풀림 방지 쐐기 체결", req: "유압잭 초기 프리스트레스 기록", state: "양호" },
+          { check: "계측기(변위계, 하중계, 지하수위계) 데이터 일일 이상 유무", req: "관리기준치(1차/2차) 대비", state: "양호" },
+          { check: "지표면 배수구 구배 형성 및 우수 굴착부 유입 차단 트렌치", req: "집수정 배수펌프 2대 확보", state: "양호" }
+        ]
+      }
+    };
+
+    function renderEquipmentChecklist(key) {
+      // 버튼 활성화 스타일
+      document.querySelectorAll('.equip-btn').forEach(btn => {
+        btn.classList.remove('bg-safety-yellow', 'text-navy-950', 'border-safety-orange');
+        btn.classList.add('bg-navy-800', 'text-slate-300', 'border-navy-700');
+      });
+      const activeBtn = document.getElementById(`equip-${key}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-navy-800', 'text-slate-300');
+        activeBtn.classList.add('bg-safety-yellow', 'text-navy-950', 'border-safety-orange');
+      }
+
+      const data = equipmentData[key];
+      const cont = document.getElementById('equipment-checklist-card');
+
+      let html = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-navy-700 gap-1 mb-4">
+          <div>
+            <h4 class="text-base sm:text-lg font-black text-white">${data.title}</h4>
+            <span class="text-xs text-safety-yellow font-bold">${data.law}</span>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            점검자: <span class="text-white font-bold">안전보건관리감독자</span> / 확인: <span class="text-safety-orange font-bold">건설안전기술사</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left border-collapse">
+            <thead>
+              <tr class="bg-navy-950 text-slate-300 border-b border-navy-700">
+                <th class="p-2.5 font-bold w-12 text-center">번호</th>
+                <th class="p-2.5 font-bold">법정 점검 항목</th>
+                <th class="p-2.5 font-bold">안전기술기준 및 합격 판정규격</th>
+                <th class="p-2.5 font-bold text-center w-24">점검결과</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-navy-800">
+      `;
+
+      data.items.forEach((item, i) => {
+        html += `
+          <tr class="hover:bg-navy-800/40">
+            <td class="p-2.5 text-center font-bold text-slate-400">${i + 1}</td>
+            <td class="p-2.5 font-semibold text-slate-200">${item.check}</td>
+            <td class="p-2.5 text-slate-400">${item.req}</td>
+            <td class="p-2.5 text-center">
+              <span class="px-2.5 py-1 rounded-md text-xs font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                ✓ ${item.state}
+              </span>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += `
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-4 p-3 rounded-xl bg-navy-950 text-[11px] text-slate-400 border border-navy-800 flex items-center justify-between">
+          <span>※ 불합격 항목 발견 시 즉시 작업 중지 및 안전조치 완료 후 기술사 재승인 필요</span>
+          <span class="text-safety-orange font-bold">SafePro 정밀진단 지원</span>
+        </div>
+      `;
+
+      cont.innerHTML = html;
+    }
+
+    // ----------------- [에이전트 5] 아차사고·재해사례 대책기 -----------------
+    const accidentDB = {
+      fall: {
+        type: "추락 (떨어짐) - 건설업 사망재해 1위 (53%)",
+        icon: "fa-person-falling",
+        caseTitle: "아파트 외벽 시스템비계 상부 작업 중 안전대 미체결 추락 (사망)",
+        desc: "작업발판을 이동하며 볼트 체결 작업을 진행하던 철골공이 중심을 잃고 18m 아래 바닥으로 추락. 안전난간 일부가 자재 반입을 위해 해체된 상태였으며 구명줄 미설치.",
+        causes: ["추락위험 개구부 안전난간 임의 해체 및 미복구", "작업자 안전그네형 안전대 착용하였으나 부착설비(구명줄)에 고리 미체결", "작업 전 관리감독자 안전작업허가제(PTW) 미실시"],
+        solution: "1. 2m 이상 모든 개구부 안전난간 해체 시 전용 작업허가서 발행 및 감시인 배치\n2. 주부재에 안전대 걸이용 와이어로프(D14mm) 수평 설치 의무화\n3. 스마트 턱끈 체결 감지 센서 및 스마트 안전고리 도입 권장"
+      },
+      hit: {
+        type: "낙하·비래 (맞음) - 고소작업 직하부 주요 위험",
+        icon: "fa-helmet-un",
+        caseTitle: "타워크레인 거푸집 자재 양중 중 슬링벨트 파단으로 자재 낙하 충격",
+        desc: "지상 12층 바닥에서 유로폼 번들을 인양하던 중 섬유 슬링벨트가 철제 모서리에 쓸려 순간 파단되면서 낙하, 직하부에서 자재 정리 중이던 근로자 강타.",
+        causes: ["샤프 엣지(예리한 모서리) 보호대(코너패드) 미적용", "인양 하부 작업구역 출입통제 미실시(신호수 부재)", "섬유 슬링벨트 일일 폐기기준(마모, 절단) 점검 소홀"],
+        solution: "1. 인양 하역 반경 1.5배 내 안전펜스 및 경보사이렌 연동 시스템 설치\n2. 인양 와이어로프 2줄 걸이 및 예리한 모서리 전용 고무패드 체결 의무화\n3. 매월 전 자재 양중용구 전수 색상 태그(Color Tagging) 관리제 적용"
+      },
+      jam: {
+        type: "협착 (끼임) - 중장비 및 가동부 접촉 재해",
+        icon: "fa-gear",
+        caseTitle: "굴착기 후방 선회 중 트럭과 차체 사이에 신호수 협착 사망",
+        desc: "토사 상차 작업 중이던 굴착기 후방 사각지대에서 통신 중이던 유도원을 운전원이 인지하지 못하고 급선회하여 덤프트럭 차체와 굴착기 카운터웨이트 사이에 협착.",
+        causes: ["굴착기 후방 접근경보센서 및 어라운드뷰 모니터 고장 방치", "신호수의 중장비 선회반경(사각지대) 진입", "상차 작업장 반경 통제 신호수와 차량 유도원 역할 혼선"],
+        solution: "1. AI 인체인식 카메라 탑재 의무화 (사람 감지 시 크레인/굴착기 자동 정지)\n2. 중장비 작업반경(반경 5m) 안전 라바콘 및 접근금지 테이프 차단벽 구축\n3. 조종원과 전용 무전기 채널 일원화 및 수신호 표준화"
+      },
+      collapse: {
+        type: "붕괴·도괴 (무너짐) - 대형 참사 고위험",
+        icon: "fa-building-wheat",
+        caseTitle: "슬래브 콘크리트 타설 중 동바리 좌굴로 층 전체 붕괴",
+        desc: "지하 1층 주차장 상부 슬래브 타설 중 편심 하중으로 동바리가 연속 붕괴되어 타설공 3명 매몰.",
+        causes: ["구조검토서와 다른 시스템동바리 수평연결재 미체결 (높이 2m마다)", "타설 시 한쪽 방향 편중 타설로 국부 하중 3배 초과", "동바리 하부 잭베이스 높이 허용치(400mm) 초과 인출"],
+        solution: "1. 5m 이상 거푸집동바리 구조계산서 및 조립도 건설안전기술사 날인 확인\n2. 타설 전 기술사 또는 전문감리원 입회하에 체크리스트 서명 완료 후 타설 승인\n3. 타설 시 중앙부터 대칭 분산타설 공법 준수"
+      },
+      asphyxia: {
+        type: "질식·중독 - 밀폐공간 동절기/하절기 재해",
+        icon: "fa-skull-crossbones",
+        caseTitle: "콘크리트 보온 양생용 갈탄 교체 작업 중 일산화탄소 중독 사망",
+        desc: "아파트 지하 2층 밀폐구간에서 갈탄 난로를 교체하러 들어간 반장이 일산화탄소 1,500ppm 환경에 노출되어 즉시 실신 및 사망.",
+        causes: ["출입 전 복합가스 측정기 측정 미실시", "송기마스크가 아닌 단순 방진마스크 착용 진입", "외부 비상감시인 미배치 및 비상 구출장비(삼각대/송풍기) 미보유"],
+        solution: "1. 밀폐공간 질식위험구역 사전 허가제 및 출입구 잠금장치 운영\n2. 갈탄 전면 금지 및 전기 열풍기/등유 열풍기로 양생 방식 전환\n3. 밀폐공간 작업 시 휴대용 산소·일산화탄소 연속 경보기 1인 1대 착용"
+      }
+    };
+
+    function loadAccidentCase(typeKey) {
+      document.querySelectorAll('.accident-pill').forEach(btn => {
+        btn.classList.remove('bg-safety-orange', 'text-navy-950', 'border-safety-yellow');
+        btn.classList.add('bg-navy-800', 'text-slate-200', 'border-navy-700');
+      });
+      event.target.classList.remove('bg-navy-800', 'text-slate-200');
+      event.target.classList.add('bg-safety-orange', 'text-navy-950', 'border-safety-yellow');
+
+      const data = accidentDB[typeKey];
+      const cont = document.getElementById('accident-case-content');
+
+      cont.innerHTML = `
+        <div class="flex items-center justify-between pb-3 border-b border-navy-800">
+          <div>
+            <span class="px-2.5 py-0.5 rounded text-xs font-black bg-rose-500/20 text-rose-400 border border-rose-500/40">
+              ${data.type}
+            </span>
+            <h4 class="text-base sm:text-lg font-black text-white mt-1.5">${data.caseTitle}</h4>
+          </div>
+        </div>
+
+        <div class="p-3.5 bg-navy-950 rounded-xl border border-navy-800">
+          <div class="text-xs font-bold text-slate-400 mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-file-waveform text-safety-yellow"></i> 실제 재해 개요 (KOSHA DB 요약)
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">${data.desc}</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 bg-navy-950 rounded-xl border border-navy-800">
+            <div class="text-xs font-bold text-rose-400 mb-2 flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-xmark"></i> 사고 직접 원인
+            </div>
+            <ul class="text-xs text-slate-300 space-y-1.5">
+              ${data.causes.map(c => `<li class="flex items-start gap-1.5"><span class="text-rose-400">•</span> ${c}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div class="p-4 bg-navy-950 rounded-xl border border-navy-800">
+            <div class="text-xs font-bold text-safety-green mb-2 flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-check"></i> 홍길동 기술사의 재발방지 엔지니어링 대책
+            </div>
+            <div class="text-xs text-slate-200 leading-relaxed whitespace-pre-line font-medium">${data.solution}</div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-navy-800 flex justify-between items-center text-xs">
+          <span class="text-slate-400">유사 공종 아차사고 위험 발굴 및 현장 진단이 필요하신가요?</span>
+          <button onclick="openConsultModal('${data.type} 재발방지 정밀진단')" class="px-3 py-1.5 bg-safety-yellow hover:bg-amber-400 text-navy-950 font-black rounded-lg transition">
+            기술사 정밀 자문 신청
+          </button>
+        </div>
+      `;
+    }
+
+    // ----------------- 페이지 초기 구동 -----------------
+    window.onload = function() {
+      // 1. 에이전트 1 초기 테이블 렌더
+      generateRiskAssessment();
+      // 2. 에이전트 2 체크리스트 생성
+      initCsapQuiz();
+      // 3. 에이전트 3 TBM 초기 스크립트
+      generateTbmScript();
+      // 4. 에이전트 4 초기 장비(타워크레인)
+      renderEquipmentChecklist('tower');
+      // 5. 에이전트 5 초기 사고사례(추락)
+      const firstAccidentBtn = document.querySelector('.accident-pill');
+      if (firstAccidentBtn) {
+        firstAccidentBtn.click();
+      }
+    };
+  </script>
+
+</body>
+</html>
